@@ -1,5 +1,9 @@
 # LiteGG
 
-A lightweight gaming client that pulls from the Riot Games API to retrieve user statistics, details, and match history. 
+LiteGG is here to simplify your gaming experience.
 
-Aims to replace the core functionality of leading league tracking websites in a compact and efficient format, skipping all of the bloat and ads that slow down users systems.
+As a sleek and efficient client, LiteGG taps into the Riot Games API to deliver essential player data at your fingertips. Track your stats, dive into match history, and stay updated on your progress – all without the clutter.
+
+Surveys collected data showing that the main complaint about leading gaming client apps is the large performance hit to their games - the goal of LiteGG is to deliver the core functionality without any of the bloat.
+
+WIP
