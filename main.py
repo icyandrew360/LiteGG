@@ -41,12 +41,12 @@ def get_match_history(puuid):
     header = {
         "X-Riot-Token" : f"{RIOT_KEY}"
     }
-    url = f'{BASE_URL}lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=10'
+    url = f'{BASE_URL}lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=10'#TODO: Add query parameters for start and count
     response = requests.get(url, headers=header)
     match_ids = response.json()
     return match_ids
 
-def get_simplified_match_details(match_id): #use this for listing matches on a page, less details
+def get_match_details(match_id): #use this for listing 1 match's details after clicking the match
     header = {
         "X-Riot-Token" : f"{RIOT_KEY}"
     }
@@ -66,14 +66,11 @@ def get_simplified_match_details(match_id): #use this for listing matches on a p
             'participant_details': participant_details
         } 
     }
-    print(simplified_details)
     return simplified_details 
 
-def get_champion_masteries(puuid): #TODO: Add the query parameters for max number of masteries to return
-    url = f'{BASE_URL}lol/champion-mastery/v4/champion-masteries/by-summoner/{puuid}?api_key={RIOT_KEY}'
-    response = requests.get(url)
-    mastery_list = response.json()
-    return mastery_list
+# TODO: get_simplified_match_details(match_id) #use this for listing all matches in a table
+
+
 
 def get_ranked_info(puuid):
     url = f'{BASE_URL}lor/ranked/v1/leaderboards?api_key={RIOT_KEY}'
@@ -81,7 +78,37 @@ def get_ranked_info(puuid):
     response = response.json()
     return response 
 
+class Account:
+    REGION_BASE_URL = "https://na1.api.riotgames.com/"
+    puuid = None
+    top_ten_champions = None
+    def __init__(self, puuid):
+        self.puuid = puuid
+        self.top_ten_champions = self.get_champion_masteries(puuid)
+
+    def get_champion_masteries(self, puuid, max_masteries=10): # Added max_masteries parameter with default value 10
+        header = {
+            "X-Riot-Token" : f"{RIOT_KEY}"
+        }
+        url = f'{self.REGION_BASE_URL}lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}?count={max_masteries}' # Added query parameter for max number of masteries to return
+        response = requests.get(url, headers=header)
+        mastery_list = response.json()
+        simplified_mastery_list = [
+            {
+                'champion': champion['championId'],
+                'championLevel': champion['championLevel'],
+                'championPoints': champion['championPoints'],
+                'lastPlayTime': convert_unix_to_date(champion['lastPlayTime']),
+            } for champion in mastery_list
+        ]
+        return simplified_mastery_list
+
 
 puuid = get_puuid()
-match_history = get_match_history(puuid)
-get_simplified_match_details(match_history[0])
+
+user = Account(puuid)
+
+# match_history = get_match_history(puuid)
+# print(get_match_details(match_history[0]))
+champion_masteries = user.top_ten_champions
+print(champion_masteries)
