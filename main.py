@@ -68,17 +68,17 @@ def get_match_details(match_id): #use this for listing 1 match's details after c
     }
     return simplified_details 
 
-# TODO: get_simplified_match_details(match_id) #use this for listing all matches in a table
+# TODO: get_simplified_match_details(match_id) #use this for listing all matches in a table, put it in account class
 
 
 
-def get_ranked_info(puuid):
+def get_ranked_info(puuid):#TODO: move to account class
     url = f'{BASE_URL}lor/ranked/v1/leaderboards?api_key={RIOT_KEY}'
     response = requests.get(url)
     response = response.json()
     return response 
 
-class Account:
+class Profile:
     REGION_BASE_URL = "https://na1.api.riotgames.com/"
     puuid = None
     top_ten_champions = None
@@ -104,11 +104,10 @@ class Account:
         return simplified_mastery_list
 
 
-puuid = get_puuid()
 
-user = Account(puuid)
+puuid = get_puuid() #TODO: Implement user input to get anyone's puuid
 
-# match_history = get_match_history(puuid)
-# print(get_match_details(match_history[0]))
-champion_masteries = user.top_ten_champions
-print(champion_masteries)
+user = Profile(puuid)
+
+match_history = get_match_history(user.puuid)
+print(get_match_details(match_history[0]))
