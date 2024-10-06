@@ -15,3 +15,4 @@ print(user.level)
 
 print(user.rankInfo.tier)
 print(user.rankInfo.rank)
+print(user.rankInfo.winrate)
