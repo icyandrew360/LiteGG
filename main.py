@@ -79,10 +79,12 @@ class Profile:
     REGION_BASE_URL = "https://na1.api.riotgames.com/"
     puuid = None
     top_ten_champions = None
+    level = 0
 
     def __init__(self, puuid):
         self.puuid = puuid
         self.top_ten_champions = self.get_champion_masteries(puuid)
+        self.level = self.get_level(puuid)
 
     def get_champion_masteries(
         self, puuid, max_masteries=10
@@ -102,6 +104,13 @@ class Profile:
         ]
         return simplified_mastery_list
 
+    def get_level(self, puuid):
+        header = {"X-Riot-Token": f"{RIOT_KEY}"}
+        url = f"{self.REGION_BASE_URL}lol/summoner/v4/summoners/by-puuid/{puuid}"
+        response = requests.get(url, headers=header)
+        response = response.json()
+        return response["summonerLevel"]
+
 
 puuid = get_puuid()  # TODO: Implement user input to get anyone's puuid
 
@@ -109,4 +118,4 @@ user = Profile(puuid)
 
 match_history = get_match_history(user.puuid)
 # print(get_match_details(match_history[0]))
-print(user.top_ten_champions)
+# print(user.top_ten_champions)
