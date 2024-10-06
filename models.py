@@ -45,7 +45,7 @@ class RankedInfo:
         self.wins = ranked_info[0]["wins"]
         self.losses = ranked_info[0]["losses"]
         self.lp = ranked_info[0]["leaguePoints"]
-        self.winrate = self.calculate_winrate()  # TODO: Implement this method
+        self.winrate = self.calculate_winrate()
 
     def calculate_winrate(self):
         return round((self.wins / (self.wins + self.losses)) * 100, 2)
