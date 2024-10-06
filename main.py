@@ -12,3 +12,6 @@ print(user.summonerId)
 print(user.accountId)
 print(user.puuid)
 print(user.level)
+
+print(user.rankInfo.tier)
+print(user.rankInfo.rank)

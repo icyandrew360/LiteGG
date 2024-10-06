@@ -98,8 +98,11 @@ def get_summoner_info(puuid):
     }
 
 
-def get_ranked_info(summonerId):
-    url = f"{REGION_BASE_URL}lol/league/v4/entries/by-summoner/{summonerId}api_key={RIOT_KEY}"
-    response = requests.get(url)
+def get_ranked_info(
+    summonerId,
+):  # I believe this returns a list of ranked info for all queuetypes
+    header = {"X-Riot-Token": f"{RIOT_KEY}"}
+    url = f"{REGION_BASE_URL}lol/league/v4/entries/by-summoner/{summonerId}"
+    response = requests.get(url, headers=header)
     response = response.json()
     return response
