@@ -1,5 +1,8 @@
 from models import Profile
 from api_client import get_puuid, get_match_history
+from helpers import load_champion_data
+
+load_champion_data()
 
 puuid = get_puuid()  # TODO: Implement user input to get anyone's puuid
 
