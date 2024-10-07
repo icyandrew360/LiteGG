@@ -7,6 +7,7 @@ from helpers import (
     get_gamemode,
     get_match_participant_details,
 )
+from response_handler import handle_response
 
 load_dotenv()
 # TODO: Implement user input to get anyone's puuid
@@ -19,9 +20,7 @@ def get_puuid():
     url = f"{BASE_URL}riot/account/v1/accounts/by-riot-id/andrew/howe"
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     response = requests.get(url, headers=header)
-
-    # parse the json response into a python dictionary
-    response = response.json()
+    response = handle_response(response)
     return response["puuid"]
 
 
@@ -30,8 +29,8 @@ def get_match_history(puuid):
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{BASE_URL}lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=10"  # TODO: Add query parameters for start and count
     response = requests.get(url, headers=header)
-    match_ids = response.json()
-    return match_ids
+    response = handle_response(response)
+    return response
 
 
 def get_match_details(
@@ -40,7 +39,7 @@ def get_match_details(
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{BASE_URL}lol/match/v5/matches/{match_id}"
     response = requests.get(url, headers=header)
-    response = response.json()
+    response = handle_response(response)
     participant_details = get_match_participant_details(response)
     simplified_details = {
         "game_metadata": {
@@ -57,13 +56,11 @@ def get_match_details(
     return simplified_details
 
 
-# TODO: get_simplified_match_details(match_id) #use this for listing all matches in a table, put it in account class
-
-
 def get_riot_id(puuid):
-    url = f"{BASE_URL}riot/account/v1/accounts/by-puuid/{puuid}?api_key={RIOT_KEY}"
-    response = requests.get(url)
-    response = response.json()
+    header = {"X-Riot-Token": f"{RIOT_KEY}"}
+    url = f"{BASE_URL}riot/account/v1/accounts/by-puuid/{puuid}"
+    response = requests.get(url, headers=header)
+    response = handle_response(response)
     return response["gameName"] + "#" + response["tagLine"]
 
 
@@ -73,7 +70,7 @@ def get_champion_masteries(
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{REGION_BASE_URL}lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}?count={max_masteries}"  # Added query parameter for max number of masteries to return
     response = requests.get(url, headers=header)
-    mastery_list = response.json()
+    response = handle_response(response)
     simplified_mastery_list = [
         {
             "champion": champion["championId"],
@@ -81,7 +78,9 @@ def get_champion_masteries(
             "championPoints": champion["championPoints"],
             "lastPlayTime": convert_unix_to_date(champion["lastPlayTime"]),
         }
-        for champion in mastery_list
+        for champion in response
+        # converting champ ids to name https://developer.riotgames.com/docs/lol#data-dragon
+        # annoying.. need to download for every patch
     ]
     return simplified_mastery_list
 
@@ -90,7 +89,7 @@ def get_summoner_info(puuid):
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{REGION_BASE_URL}lol/summoner/v4/summoners/by-puuid/{puuid}"
     response = requests.get(url, headers=header)
-    response = response.json()
+    response = handle_response(response)
     return {
         "accountId": response["accountId"],
         "summonerId": response["id"],
@@ -104,5 +103,5 @@ def get_ranked_info(
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{REGION_BASE_URL}lol/league/v4/entries/by-summoner/{summonerId}"
     response = requests.get(url, headers=header)
-    response = response.json()
+    response = handle_response(response)
     return response
