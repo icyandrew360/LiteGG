@@ -2,7 +2,7 @@ from models import Profile
 from api_client import get_puuid
 from helpers import get_champion_by_key, create_champion_id_cache
 
-create_champion_id_cache()
+create_champion_id_cache()  # Called once to create cache. does not need to be called again.
 
 print(get_champion_by_key(1))
 
