@@ -1,5 +1,6 @@
 import time
-import json
+import requests
+from exceptions import ChampionLoadingError
 
 
 def convert_sec_to_time(sec):
@@ -39,13 +40,42 @@ def get_match_participant_details(response):
 
 CHAMPION_DATA_PATH = "lol_patch_data/champion.json"  # This needs to be updated every patch. Is there a better way?
 
+championJson = {}
 
-def load_champion_data():
-    with open(CHAMPION_DATA_PATH, "r") as f:
-        data = json.load(f)
 
-    id_to_name = {}
-    for champion_info in data["data"].values():
-        id_to_name[champion_info["key"]] = champion_info["name"]
+def load_latest_champion_data():
+    language = "en_US"  # We can change this to the users language.
+    if championJson.get(language):
+        return championJson[language]
+    versionIndex = 0
+    versionUrl = "https://ddragon.leagueoflegends.com/api/versions.json"
+    versionResponse = requests.get(versionUrl).json()
 
-    print(id_to_name)
+    while versionIndex < len(versionResponse):
+        version = versionResponse[versionIndex]
+        championUrl = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/{language}/champion.json"
+        championResponse = requests.get(championUrl).json()
+        if championResponse:
+            championJson[language] = championResponse
+            return championResponse
+        versionIndex += 1
+
+    raise ChampionLoadingError(
+        "Failed to load champion data from all available versions."
+    )
+
+
+championIdCache = {}
+
+
+def create_champion_id_cache():
+    championData = load_latest_champion_data()
+    for champion_info in championData["data"].values():
+        championIdCache[int(champion_info["key"])] = champion_info["name"]
+
+
+def get_champion_by_key(key):
+    if championIdCache.get(key):
+        return championIdCache[key]
+
+    return championIdCache[key]

@@ -12,3 +12,7 @@ class NotFoundError(Exception):
 
 class GeneralAPIError(Exception):
     pass
+
+
+class ChampionLoadingError(Exception):
+    pass
