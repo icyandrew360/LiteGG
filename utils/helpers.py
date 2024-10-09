@@ -1,6 +1,6 @@
 import time
 import requests
-from exceptions import ChampionLoadingError
+from exceptions.exceptions import ChampionLoadingError
 
 
 def convert_sec_to_time(sec):

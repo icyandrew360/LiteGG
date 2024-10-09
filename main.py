@@ -1,8 +1,8 @@
-from models import Profile
-from api_client import get_puuid
-from helpers import get_champion_by_key, create_champion_id_cache
+from models.models import Profile
+from api.api_client import get_puuid
+from utils.helpers import get_champion_by_key, create_champion_id_cache
 
-create_champion_id_cache()  # Called once to create cache. does not need to be called again.
+create_champion_id_cache()  # Called once to create cache from riot's latest patch. does not need to be called again.
 
 print(get_champion_by_key(1))
 
@@ -12,12 +12,12 @@ user = Profile(puuid)
 
 # match_history = get_match_history(user.puuid)
 # print(get_match_details(match_history[0]))
-# print(user.riotId)
-# print(user.summonerId)
-# print(user.accountId)
-# print(user.puuid)
-# print(user.level)
+print(user.riotId)
+print(user.summonerId)
+print(user.accountId)
+print(user.puuid)
+print(user.level)
 
-# print(user.rankInfo.tier)
-# print(user.rankInfo.rank)
-# print(user.rankInfo.winrate)
+print(user.rankInfo.tier)
+print(user.rankInfo.rank)
+print(user.rankInfo.winrate)

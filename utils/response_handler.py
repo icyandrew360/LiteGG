@@ -1,6 +1,11 @@
 import requests
 
-from exceptions import UnauthorizedError, ForbiddenError, NotFoundError, GeneralAPIError
+from exceptions.exceptions import (
+    UnauthorizedError,
+    ForbiddenError,
+    NotFoundError,
+    GeneralAPIError,
+)
 
 
 def handle_response(response):

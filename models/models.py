@@ -1,4 +1,4 @@
-from api_client import (
+from api.api_client import (
     get_champion_masteries,
     get_summoner_info,
     get_riot_id,

@@ -1,13 +1,13 @@
 import requests
 from dotenv import load_dotenv
-from consts import RIOT_KEY
-from helpers import (
+from config.consts import RIOT_KEY
+from utils.helpers import (
     convert_sec_to_time,
     convert_unix_to_date,
     get_gamemode,
     get_match_participant_details,
 )
-from response_handler import handle_response
+from utils.response_handler import handle_response
 
 load_dotenv()
 # TODO: Implement user input to get anyone's puuid
