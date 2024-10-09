@@ -7,3 +7,5 @@ As a sleek and efficient client, LiteGG taps into the Riot Games API to deliver 
 Surveys collected data showing that the main complaint about leading gaming client apps is the large performance hit to their games - the goal of LiteGG is to deliver the core functionality without any of the bloat.
 
 WIP
+
+For developers: make sure node.js is installed on your system. https://nodejs.org/en/download/package-manager
