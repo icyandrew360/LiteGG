@@ -6,7 +6,7 @@ create_champion_id_cache()  # Called once to create cache from riot's latest pat
 
 print(get_champion_by_key(1))
 
-puuid = get_puuid()  # TODO: Implement user input to get anyone's puuid
+puuid = get_puuid("andrew", "HOWE")
 
 user = Profile(puuid)
 
@@ -21,3 +21,4 @@ print(user.level)
 print(user.rankInfo.tier)
 print(user.rankInfo.rank)
 print(user.rankInfo.winrate)
+print(user.topTenChampions)

@@ -6,6 +6,7 @@ from utils.helpers import (
     convert_unix_to_date,
     get_gamemode,
     get_match_participant_details,
+    get_champion_by_key,
 )
 from utils.response_handler import handle_response
 
@@ -16,8 +17,8 @@ BASE_URL = "https://americas.api.riotgames.com/"
 REGION_BASE_URL = "https://na1.api.riotgames.com/"
 
 
-def get_puuid():
-    url = f"{BASE_URL}riot/account/v1/accounts/by-riot-id/andrew/howe"
+def get_puuid(id, tagline):
+    url = f"{BASE_URL}riot/account/v1/accounts/by-riot-id/{id}/{tagline}"
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     response = requests.get(url, headers=header)
     response = handle_response(response)
@@ -73,7 +74,7 @@ def get_champion_masteries(
     response = handle_response(response)
     simplified_mastery_list = [
         {
-            "champion": champion["championId"],
+            "champion": get_champion_by_key(champion["championId"]),
             "championLevel": champion["championLevel"],
             "championPoints": champion["championPoints"],
             "lastPlayTime": convert_unix_to_date(champion["lastPlayTime"]),
