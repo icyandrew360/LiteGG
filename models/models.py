@@ -44,6 +44,7 @@ class RankedInfo:
         self.rank = ranked_info[0]["rank"]
         self.wins = ranked_info[0]["wins"]
         self.losses = ranked_info[0]["losses"]
+        self.totalGames = self.wins + self.losses
         self.lp = ranked_info[0]["leaguePoints"]
         self.winrate = self.calculate_winrate()
 
