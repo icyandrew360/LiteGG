@@ -7,5 +7,9 @@ frontend-dev:
 	npm install
 	npm install @fontsource/roboto
 
+frontend-preview:
+	cd app
+	npm run dev
+
 precommit-hooks:
 	pre-commit run --all-files
