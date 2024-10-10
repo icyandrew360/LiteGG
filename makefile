@@ -1,7 +1,10 @@
 setup:
 	pip install -r requirements.txt
 	pre-commit install
-	npm install react react-dom @mui/material @emotion/react @emotion/styled
+
+frontend-dev:
+	cd app
+	npm install
 	npm install @fontsource/roboto
 
 precommit-hooks:

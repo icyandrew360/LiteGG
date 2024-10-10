@@ -9,3 +9,5 @@ Surveys collected data showing that the main complaint about leading gaming clie
 WIP
 
 For developers: make sure node.js is installed on your system. https://nodejs.org/en/download/package-manager
+
+Run frontend preview: cd app, npm run dev
