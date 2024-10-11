@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { LiteGGIcon } from './CustomIcons';
+import './login.css';
 // import AppTheme from '../shared-theme/AppTheme';
 // import ColorModeSelect from '../shared-theme/ColorModeSelect';
 
@@ -38,14 +39,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   },
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.default,
   minHeight: '100%',
   height:"100vh",
   display: 'flex',
@@ -100,14 +97,16 @@ export default function SignIn() {
     <div>
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
-        <Card>
+        <Card className="loginCard">
           {/* <LiteGGIcon /> */}
           <Typography
             component="h1"
-            variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+            variant="h1"
+            className="typography-margin"
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 4.5rem)' }} // vw means viewport with. if 10vw, it means 10% of the viewport width.
+            //this means by default, the font size will be 10% of the viewport width, but it will not exceed 4.5rem or go below 2rem. rem is fontsize of root element (h1)
           >
-            Sign in
+            LiteGG
           </Typography>
           <Box
             component="form"
@@ -121,7 +120,7 @@ export default function SignIn() {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="riotID">Please enter your Riot ID and tagline</FormLabel>
+              <FormLabel className="enterRiotID" htmlFor="riotID">RiotID</FormLabel>
               <TextField
                 error={idError}
                 helperText={idErrorMessage}
@@ -131,8 +130,21 @@ export default function SignIn() {
                 required
                 fullWidth
                 variant="outlined"
-                color={idError ? 'error' : 'info'}
-                sx={{ ariaLabel: 'riotID', input: { color: 'white' } }}
+                color={idError ? 'error' : 'primary'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'gray', // Default border color when unfocused
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'white', // Border color on hover
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'white', // Border color when focused
+                    },
+                  },
+                  input: { color: 'white' }
+                }}
               />
             </FormControl>
 
