@@ -22,20 +22,37 @@ def get_gamemode(string):
     return gamemode_dict[string] if string in gamemode_dict else string
 
 
-def get_match_participant_details(response):
-    return [
-        {
-            "riotIdName": participant["riotIdGameName"],
-            "riotIdTagline": participant["riotIdTagline"],
-            "champion": participant["championName"],
-            "win": participant["win"],
-            "kills": participant["kills"],
-            "deaths": participant["deaths"],
-            "assists": participant["assists"],
-            "cs_score": participant["totalMinionsKilled"],
-        }
-        for participant in response["info"]["participants"]
-    ]
+def get_match_participant_details(response, winner):
+    if winner:
+        return [
+            {
+                "riotIdName": participant["riotIdGameName"],
+                "riotIdTagline": participant["riotIdTagline"],
+                "champion": participant["championName"],
+                "win": participant["win"],
+                "kills": participant["kills"],
+                "deaths": participant["deaths"],
+                "assists": participant["assists"],
+                "cs_score": participant["totalMinionsKilled"],
+            }
+            for participant in response["info"]["participants"]
+            if participant["win"]
+        ]
+    else:
+        return [
+            {
+                "riotIdName": participant["riotIdGameName"],
+                "riotIdTagline": participant["riotIdTagline"],
+                "champion": participant["championName"],
+                "win": participant["win"],
+                "kills": participant["kills"],
+                "deaths": participant["deaths"],
+                "assists": participant["assists"],
+                "cs_score": participant["totalMinionsKilled"],
+            }
+            for participant in response["info"]["participants"]
+            if not participant["win"]
+        ]
 
 
 CHAMPION_DATA_PATH = "lol_patch_data/champion.json"  # This needs to be updated every patch. Is there a better way?
