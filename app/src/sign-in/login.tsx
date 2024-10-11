@@ -13,14 +13,26 @@ import { LiteGGIcon } from './CustomIcons';
 // import AppTheme from '../shared-theme/AppTheme';
 // import ColorModeSelect from '../shared-theme/ColorModeSelect';
 
+// const flyUp = keyframes`
+//   0% {
+//     transform: translateY(0);
+//   }
+//   100% {
+//     transform: translateY(-100vh);
+//   }
+// `;
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  alignSelf: 'center',
+  // alignSelf: 'center',
   width: '100%',
+  alignItems: 'center',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
+  marginTop: '30vh',
+  backgroundColor: theme.palette.background.default,
   [theme.breakpoints.up('sm')]: {
     maxWidth: '450px',
   },
@@ -33,39 +45,38 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
   minHeight: '100%',
+  height:"100vh",
+  display: 'flex',
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
   },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
+export default function SignIn() {
   const [idError, setIdError] = React.useState(false);
   const [idErrorMessage, setIdErrorMessage] = React.useState('');
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    console.log('current login status:', isLoggedIn);
+    event.preventDefault();
     if (idError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
     console.log({
       riotID: data.get('riotID'),
     });
+
+    setIsLoggedIn(true);
+
+    setTimeout(() => {
+      // navigation logic to dashboard
+      console.log('Redirecting to dashboard...');
+    }, 1000);
   };
 
   const validateInputs = () => {
@@ -89,8 +100,8 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     <div>
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <LiteGGIcon />
+        <Card>
+          {/* <LiteGGIcon /> */}
           <Typography
             component="h1"
             variant="h4"
@@ -116,13 +127,12 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 helperText={idErrorMessage}
                 id="riotID"
                 name="riotID"
-                placeholder="summoner#NA1"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={idError ? 'error' : 'primary'}
-                sx={{ ariaLabel: 'email' }}
+                color={idError ? 'error' : 'info'}
+                sx={{ ariaLabel: 'riotID', input: { color: 'white' } }}
               />
             </FormControl>
 
