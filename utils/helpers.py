@@ -25,7 +25,7 @@ def get_gamemode(string):
 def get_match_participant_details(response):
     return [
         {
-            "summonerName": participant["summonerName"],
+            "riotIdName": participant["riotIdGameName"],
             "riotIdTagline": participant["riotIdTagline"],
             "champion": participant["championName"],
             "win": participant["win"],
