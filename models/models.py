@@ -46,29 +46,3 @@ class RankedInfo:
 
     def calculate_winrate(self, wins, losses):
         return round((wins / (wins + losses)) * 100, 2)
-
-
-# class QueueDetails:
-#     queueType = None
-#     tier = None
-#     rank = None
-#     wins = None
-#     losses = None
-#     lp = None
-#     winrate = None
-
-#     def __init__(
-#         self, summonerId
-#     ):  # Initialize with the most played queue type. can call this method to get ranked info for a different queue type explicitly
-#         ranked_info = get_ranked_info(summonerId)  # ranked_info is a list of dicts
-#         self.queueType = ranked_info[0]["queueType"]
-#         self.tier = ranked_info[0]["tier"]
-#         self.rank = ranked_info[0]["rank"]
-#         self.wins = ranked_info[0]["wins"]
-#         self.losses = ranked_info[0]["losses"]
-#         self.totalGames = self.wins + self.losses
-#         self.lp = ranked_info[0]["leaguePoints"]
-#         self.winrate = self.calculate_winrate()
-
-#     def calculate_winrate(self):
-#         return round((self.wins / (self.wins + self.losses)) * 100, 2)
