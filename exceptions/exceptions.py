@@ -14,5 +14,5 @@ class GeneralAPIError(Exception):
     pass
 
 
-class ChampionLoadingError(Exception):
+class PatchLoadingError(Exception):
     pass

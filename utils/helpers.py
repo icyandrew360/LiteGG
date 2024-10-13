@@ -1,6 +1,7 @@
+import json
 import time
 import requests
-from exceptions.exceptions import ChampionLoadingError
+from exceptions.exceptions import PatchLoadingError
 
 
 def convert_sec_to_time(sec):
@@ -55,12 +56,12 @@ def get_match_participant_details(response, winner):
         ]
 
 
-CHAMPION_DATA_PATH = "lol_patch_data/champion.json"  # This needs to be updated every patch. Is there a better way?
-
 championJson = {}
+gameTypeJson = {}
 
 
-def load_latest_champion_data():
+# RETURNS: champion data from the latest patch
+def load_latest_patch_data():
     language = "en_US"  # We can change this to the users language.
     if championJson.get(language):
         return championJson[language]
@@ -72,27 +73,36 @@ def load_latest_champion_data():
         version = versionResponse[versionIndex]
         championUrl = f"https://ddragon.leagueoflegends.com/cdn/{version}/data/{language}/champion.json"
         championResponse = requests.get(championUrl).json()
+
         if championResponse:
             championJson[language] = championResponse
             return championResponse
+
         versionIndex += 1
 
-    raise ChampionLoadingError(
-        "Failed to load champion data from all available versions."
-    )
+    raise PatchLoadingError("Failed to load patch data from all available versions.")
 
 
 championIdCache = {}
+QueueIdCache = {}
+QUEUE_ID_DATAPATH = "lol_patch_data/queues.json"  # This needs to be updated every patch. Is there a better way?
 
 
-def create_champion_id_cache():
-    championData = load_latest_champion_data()
+def create_patch_data_cache():
+    championData = load_latest_patch_data()
     for champion_info in championData["data"].values():
         championIdCache[int(champion_info["key"])] = champion_info["name"]
+    with open(QUEUE_ID_DATAPATH, "r") as f:
+        queueData = json.load(f)
+        for queue in queueData:
+            QueueIdCache[queue["queueId"]] = queue["description"]
 
 
 def get_champion_by_key(key):
     if championIdCache.get(key):
         return championIdCache[key]
 
-    return championIdCache[key]
+
+def get_queue_by_id(queueId):
+    if QueueIdCache.get(queueId):
+        return QueueIdCache[queueId]

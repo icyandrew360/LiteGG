@@ -7,6 +7,7 @@ from utils.helpers import (
     get_gamemode,
     get_match_participant_details,
     get_champion_by_key,
+    get_queue_by_id,
 )
 from utils.response_handler import handle_response
 
@@ -44,9 +45,10 @@ def get_match_details(
     winner_participant_details = get_match_participant_details(response, winner=True)
     loser_participant_details = get_match_participant_details(response, winner=False)
     simplified_details = {
-        "game_metadata": {
+        "game_metadata": {  # TODO: add game mode type (solo duo, flex, etc)
             "gameMode": get_gamemode(response["info"]["gameMode"]),
             "queueId": response["info"]["queueId"],
+            "queueType": get_queue_by_id(response["info"]["queueId"]),
             "gameDuration": convert_sec_to_time(response["info"]["gameDuration"]),
             "gameCreation": convert_unix_to_date(response["info"]["gameCreation"]),
             "gameId": response["metadata"]["matchId"],
