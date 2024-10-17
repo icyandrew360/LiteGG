@@ -4,26 +4,9 @@ from utils.helpers import create_patch_data_cache
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
-create_patch_data_cache()  # Called once to create cache from riot's latest patch. does not need to be called again.
-# print(get_champion_by_key(1))
-# print(get_queue_by_id(440))
+create_patch_data_cache()
 
-# puuid = get_puuid("famercate123", "bow")
-
-# user = Profile(puuid)
-
-# match_history = get_match_history(user.puuid)
-# print(get_match_details(match_history[0]))
-# print(user.riotId)
-# print(user.summonerId)
-# print(user.accountId)
-# print(user.puuid)
-# print(user.level)
-
-# print(
-#     user.rankInfo.rankedQueueInfo[0]
-# )  # a list of ranked queue info in order of most played queue type.
-
+# for testing userinfo purposes: curl "http://0.0.0.0:8000/user-info?riotID=andrew%23howe"
 app = FastAPI()
 
 
