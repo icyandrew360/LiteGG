@@ -28,6 +28,9 @@ const theme = createTheme({
     allVariants: {
       color: "#e3f2fd"
     }
+  },
+  shape: {
+    borderRadius: 6
   }
 })
 // using this color palette: https://colorhunt.co/palette/151515a91d3ac73659eeeeee

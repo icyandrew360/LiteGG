@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { LiteGGIcon } from './CustomIcons';
+import { useUser } from '../UserContext';
 import './login.css';
 // import AppTheme from '../shared-theme/AppTheme';
 // import ColorModeSelect from '../shared-theme/ColorModeSelect';
@@ -42,8 +43,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
-  minHeight: '100%',
+  // backgroundColor: theme.palette.background.default,
   height:"100vh",
   display: 'flex',
   padding: theme.spacing(2),
@@ -56,6 +56,7 @@ export default function SignIn() {
   const [idError, setIdError] = React.useState(false);
   const [idErrorMessage, setIdErrorMessage] = React.useState('');
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const { setCurrentUser } = useUser();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     console.log('current login status:', isLoggedIn);
@@ -64,16 +65,13 @@ export default function SignIn() {
       return;
     }
     const data = new FormData(event.currentTarget);
+    const riotID = data.get('riotID') as string;
     console.log({
-      riotID: data.get('riotID'),
+      riotID
     });
 
+    setCurrentUser(riotID);
     setIsLoggedIn(true);
-
-    setTimeout(() => {
-      // navigation logic to dashboard
-      console.log('Redirecting to dashboard...');
-    }, 1000);
   };
 
   const validateInputs = () => {
@@ -81,11 +79,12 @@ export default function SignIn() {
 
     let isValid = true;
 
-    if (!riotID.value || !/\S+#+\S{3,5}/.test(riotID.value)) {
+    if (!riotID.value || !/\S+#+\S{3,5}$/.test(riotID.value)) {
       setIdError(true);
       setIdErrorMessage('Please enter a valid Riot ID and tagline.');
       isValid = false;
     } else {
+      setCurrentUser(riotID.value);
       setIdError(false);
       setIdErrorMessage('');
     }
