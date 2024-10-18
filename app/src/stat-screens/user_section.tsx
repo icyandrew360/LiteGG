@@ -40,7 +40,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function UserSection() {
-  const { currentUser } = useUser();
+  const { currentUser, userInfo } = useUser();
   return (
     // <AppTheme {...props}>
     <div>
@@ -48,6 +48,8 @@ export default function UserSection() {
         <Card>
           <Typography variant="h4">User Stats</Typography>
           <Typography variant="h6">Welcome, {currentUser}!</Typography>
+          <Typography variant="body1">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
+          <Typography variant="body1">Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
         </Card>
       </UserSectionContainer>
     </div>

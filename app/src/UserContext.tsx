@@ -2,16 +2,19 @@ import { createContext, useState, useContext, ReactNode } from 'react';
 
 interface UserContextType {
     currentUser: string;
+    userInfo: any;
     setCurrentUser: (user: string) => void;
+    setUserInfo: (info: any) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<string>('');
+    const [userInfo, setUserInfo] = useState<any>({});
 
     return (
-        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <UserContext.Provider value={{ currentUser, userInfo, setCurrentUser, setUserInfo }}>
             {children}
         </UserContext.Provider>
     );

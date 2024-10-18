@@ -2,12 +2,28 @@ from models.models import Profile, ChampionMasteries, RankedInfo
 from api.api_client import get_puuid
 from utils.helpers import create_patch_data_cache
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 create_patch_data_cache()
 
 # for testing userinfo purposes: curl "http://0.0.0.0:8000/user-info?riotID=andrew%23howe"
 app = FastAPI()
+
+# Configure CORS
+origins = [
+    "http://localhost:3000",  # React development server
+    "http://localhost:5173",  # Vite dev server
+    "http://litegg.com",  # Production domain when it comes time to deploy
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class UserInfoRequest(BaseModel):

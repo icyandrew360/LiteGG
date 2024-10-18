@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import { LiteGGIcon } from './CustomIcons';
 import { useUser } from '../UserContext';
@@ -56,9 +57,9 @@ export default function SignIn() {
   const [idError, setIdError] = React.useState(false);
   const [idErrorMessage, setIdErrorMessage] = React.useState('');
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const { setCurrentUser } = useUser();
+  const { setCurrentUser, setUserInfo} = useUser();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     console.log('current login status:', isLoggedIn);
     event.preventDefault();
     if (idError) {
@@ -66,12 +67,19 @@ export default function SignIn() {
     }
     const data = new FormData(event.currentTarget);
     const riotID = data.get('riotID') as string;
-    console.log({
-      riotID
-    });
+    console.log("riotID: ", riotID);
 
     setCurrentUser(riotID);
     setIsLoggedIn(true);
+
+    try {
+      const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(riotID)}`);
+      const userInfo = response.data;
+      console.log('User info:', userInfo);
+      setUserInfo(userInfo); // Set the user info in the context
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
   };
 
   const validateInputs = () => {
