@@ -75,6 +75,7 @@ export default function UserSection() {
     const fetchData = async () => {
       try {
         setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 50));
         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' }); // Scroll down 100vh
         const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(currentUser)}`);
         setUserInfo(response.data);
