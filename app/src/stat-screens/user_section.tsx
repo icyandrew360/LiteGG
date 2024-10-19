@@ -5,9 +5,11 @@
 // import FormLabel from '@mui/material/FormLabel';
 // import FormControl from '@mui/material/FormControl';
 // import TextField from '@mui/material/TextField';
+import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import axios from 'axios';
 import { styled } from '@mui/material/styles';
 // import { LiteGGIcon } from './CustomIcons';
 import './user_section.css';
@@ -40,7 +42,36 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function UserSection() {
-  const { currentUser, userInfo } = useUser();
+  const { currentUser, userInfo, setUserInfo} = useUser();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(currentUser)}`);
+        setUserInfo(response.data);
+        setError(false)
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+
+    if (currentUser){
+      fetchData();
+    }
+  }, [currentUser]);
+
+  if (loading) {
+    return <Typography variant="h6">Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography variant="h6">Error loading data</Typography>;
+  }
+
   return (
     // <AppTheme {...props}>
     <div>
@@ -48,8 +79,12 @@ export default function UserSection() {
         <Card>
           <Typography variant="h4">User Stats</Typography>
           <Typography variant="h6">Welcome, {currentUser}!</Typography>
-          <Typography variant="body1">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
-          <Typography variant="body1">Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+          {userInfo.summonerInfo && (
+            <Typography variant="body1">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
+          )}
+          {userInfo.userRankedInfo && (
+            <Typography variant="body1">Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+          )}
         </Card>
       </UserSectionContainer>
     </div>

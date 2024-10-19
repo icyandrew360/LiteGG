@@ -12,9 +12,7 @@ app = FastAPI()
 
 # Configure CORS
 origins = [
-    "http://localhost:3000",  # React development server
     "http://localhost:5173",  # Vite dev server
-    "http://litegg.com",  # Production domain when it comes time to deploy
 ]
 
 app.add_middleware(

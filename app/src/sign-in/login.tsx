@@ -57,7 +57,7 @@ export default function SignIn() {
   const [idError, setIdError] = React.useState(false);
   const [idErrorMessage, setIdErrorMessage] = React.useState('');
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const { setCurrentUser, setUserInfo} = useUser();
+  const { setCurrentUser } = useUser();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     console.log('current login status:', isLoggedIn);
@@ -72,14 +72,14 @@ export default function SignIn() {
     setCurrentUser(riotID);
     setIsLoggedIn(true);
 
-    try {
-      const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(riotID)}`);
-      const userInfo = response.data;
-      console.log('User info:', userInfo);
-      setUserInfo(userInfo); // Set the user info in the context
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-    }
+    // try {
+    //   const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(riotID)}`);
+    //   const userInfo = response.data;
+    //   console.log('User info:', userInfo);
+    //   setUserInfo(userInfo); // Set the user info in the context
+    // } catch (error) {
+    //   console.error('Error fetching user info:', error);
+    // }
   };
 
   const validateInputs = () => {
