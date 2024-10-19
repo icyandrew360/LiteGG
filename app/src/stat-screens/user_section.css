@@ -1,0 +1,5 @@
+.customCircularProgress {
+    margin-top: 40vh;
+    width: 50px !important; /* Change the width */
+    height: 50px !important; /* Change the height */
+  }
