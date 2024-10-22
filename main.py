@@ -42,7 +42,7 @@ async def user_info(
     summonerInfo = await Profile.create(puuid)
     userMasteries = await ChampionMasteries.create(puuid)
     userRankedInfo = await RankedInfo.create(summonerInfo.summonerId)
-
+    print(userMasteries)
     return {
         "summonerInfo": summonerInfo,
         "userMasteries": userMasteries,

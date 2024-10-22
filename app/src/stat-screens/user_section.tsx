@@ -16,21 +16,52 @@ import { styled } from '@mui/material/styles';
 import './user_section.css';
 import { useUser } from '../UserContext.tsx';
 
-const UserSectionContainer = styled(Stack)(({ theme }) => ({
+const UserSectionScreen = styled(Stack)(({ theme }) => ({
   height:"100vh",
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+  flexDirection: 'row',
+  // alignItems: 'center',
+  justifyContent: 'space-around',
   padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
+  // [theme.breakpoints.up('sm')]: {
+  //   padding: theme.spacing(4),
+  // },
 }));
+
+const UserInfoContainer = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  // backgroundColor: 'red',
+  alignItems: 'center',
+  // justifyContent: 'center',
+  padding: theme.spacing(2),
+  // [theme.breakpoints.up('sm')]: {
+  //   padding: theme.spacing(4),
+  // },
+}));
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  // alignSelf: 'flex-start',
+  width: '500px',
+  alignItems: 'center',
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  marginTop: theme.spacing(2),
+  backgroundColor: theme.palette.background.paper,
+  [theme.breakpoints.up('sm')]: {
+    maxWidth: '100%',
+  },
+  boxShadow:
+    'hsla(0, 50%, 15%, 0.2) 0px 5px 15px 0px, hsla(0, 50%, 15%, 0.2) 0px 15px 35px -5px',
+}));
+
 const UserSectionGroup = styled(MuiCard)(({ theme }) => ({
   height:"60px",
   width:"100%",
   display: 'flex',
-  backgroundColor: '#3b0a12',
+  backgroundColor: '#141414',
   flexDirection: 'row',
   justifyContent: 'space-between',
   // paddingTop: theme.spacing(2),
@@ -48,22 +79,7 @@ const UserSectionItem = styled(Stack)(({ theme }) => ({
   // paddingLeft: theme.spacing(2),
   // paddingRight: theme.spacing(2),
 }));
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'flex-start',
-  width: '500px',
-  alignItems: 'center',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  marginTop: '10vh',
-  backgroundColor: theme.palette.background.paper,
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '100%',
-  },
-  boxShadow:
-    'hsla(0, 50%, 15%, 0.2) 0px 5px 15px 0px, hsla(0, 50%, 15%, 0.2) 0px 15px 35px -5px',
-}));
+
 
 export default function UserSection() {
   const { currentUser, userInfo, setUserInfo} = useUser();
@@ -79,6 +95,7 @@ export default function UserSection() {
         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' }); // Scroll down 100vh
         const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(currentUser)}`);
         setUserInfo(response.data);
+        console.log('User info:', response.data);
         setSuccess(true);
         setError(false)
         setLoading(false);
@@ -95,49 +112,75 @@ export default function UserSection() {
 
   if (loading) {
     return (
-      <UserSectionContainer>
+      <UserSectionScreen>
         <CircularProgress className="customCircularProgress"/>
-      </UserSectionContainer>
+      </UserSectionScreen>
     );
   }
 
   if (error) {
     return (
-      <UserSectionContainer>
+      <UserSectionScreen>
         <Typography variant="h6">Error: RiotID not found</Typography>
-      </UserSectionContainer>
+      </UserSectionScreen>
     );
   }
 
   if (success) {
     return (
       <div>
-        <UserSectionContainer>
-          <Card>
-            <Typography variant="h4">Welcome, {currentUser}!</Typography>
-            {userInfo.summonerInfo && (
-              <Typography variant="h6">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
-            )}
-            {userInfo.userRankedInfo && (
-              <UserSectionGroup>
+        <UserSectionScreen>
+          <UserInfoContainer>
+            <Card>
+              <Typography variant="h4">Welcome, {currentUser}!</Typography>
+              {userInfo.summonerInfo && (
+                <Typography variant="h6">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
+              )}
+              {userInfo.userRankedInfo && (
+                <UserSectionGroup>
+                  <UserSectionItem>
+                    <Typography variant="body1" className='rankedInfoText'>Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+                  </UserSectionItem>
+                  <UserSectionItem>
+                    <Typography variant="body1" className='rankedInfoText'>LP: {userInfo.userRankedInfo.rankedQueueInfo[0].lp}</Typography>
+                  </UserSectionItem>
+                  <UserSectionItem>
+                    <Typography variant="body1" className='rankedInfoText'>Win/Loss</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].wins} - {userInfo.userRankedInfo.rankedQueueInfo[0].losses}</Typography>
+                  </UserSectionItem>
+                  <UserSectionItem>
+                    <Typography variant="body1" className='rankedInfoText'>Winrate</Typography>
+                    <Typography
+                      variant="body1"
+                      className='rankedInfoText'
+                      style={{color: userInfo.userRankedInfo.rankedQueueInfo[0].winrate >= 50 ? '#00b327' : '#c91844'}}
+                    >
+                        {userInfo.userRankedInfo.rankedQueueInfo[0].winrate}%
+                    </Typography>
+                  </UserSectionItem>
+                </UserSectionGroup>
+              )}
+            </Card>
+            <Card>
+            <Typography variant="h4">Top 10 Masteries:</Typography>
+            {userInfo.userMasteries.championMasteryList.slice(0, 10).map((mastery, index) => (
+              <UserSectionGroup key={index}>
                 <UserSectionItem>
-                  <Typography variant="body1" className='rankedInfoText'>Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+                  <Typography variant="h6">{mastery.champion}:</Typography>
                 </UserSectionItem>
                 <UserSectionItem>
-                  <Typography variant="body1" className='rankedInfoText'>LP: {userInfo.userRankedInfo.rankedQueueInfo[0].lp}</Typography>
+                  <Typography variant="body1">Mastery points</Typography>
+                  <Typography variant="body1">{mastery.championPoints}</Typography>
                 </UserSectionItem>
-                <UserSectionItem>
-                  <Typography variant="body1" className='rankedInfoText'>Win/Loss</Typography>
-                  <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].wins} - {userInfo.userRankedInfo.rankedQueueInfo[0].losses}</Typography>
-                </UserSectionItem>
-                <UserSectionItem>
-                  <Typography variant="body1" className='rankedInfoText'>Winrate</Typography>
-                  <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].winrate}%</Typography>
-                </UserSectionItem>
+                {/* <UserSectionItem>
+                  <Typography variant="body1">Last played</Typography>
+                  <Typography variant="body1">{mastery.lastPlayTime}</Typography>
+                </UserSectionItem> */}
               </UserSectionGroup>
-            )}
-          </Card>
-        </UserSectionContainer>
+            ))}
+            </Card>
+          </UserInfoContainer>
+        </UserSectionScreen>
       </div>
     );
   }

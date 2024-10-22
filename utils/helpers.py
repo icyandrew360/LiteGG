@@ -1,5 +1,6 @@
 import json
 import time
+from datetime import datetime
 import requests
 from exceptions.exceptions import PatchLoadingError
 
@@ -9,7 +10,11 @@ def convert_sec_to_time(sec):
 
 
 def convert_unix_to_date(unix):
-    return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(unix / 1000))
+    local_time = datetime.fromtimestamp(unix / 1000)
+
+    # mountain_TZ = pytz.timezone('US/Mountain')
+    # mountain_time = utc_time.replace(tzinfo=pytz.utc).astimezone(mountain_TZ)
+    return local_time.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_gamemode(string):
