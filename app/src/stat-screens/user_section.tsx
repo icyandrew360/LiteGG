@@ -17,7 +17,7 @@ import './user_section.css';
 import { useUser } from '../UserContext.tsx';
 
 const UserSectionScreen = styled(Stack)(({ theme }) => ({
-  height:"100vh",
+  minHeight:"100vh",
   display: 'flex',
   flexDirection: 'row',
   // alignItems: 'center',
@@ -61,6 +61,7 @@ const UserSectionGroup = styled(MuiCard)(({ theme }) => ({
   height:"60px",
   width:"100%",
   display: 'flex',
+  // backgroundColor: 'green',
   backgroundColor: '#141414',
   flexDirection: 'row',
   justifyContent: 'space-between',
