@@ -1,5 +1,4 @@
 import requests
-from dotenv import load_dotenv
 from config.consts import RIOT_KEY
 from utils.helpers import (
     convert_sec_to_time,
@@ -11,11 +10,14 @@ from utils.helpers import (
 )
 from utils.response_handler import handle_response
 
-load_dotenv()
 # TODO: Implement user input to get anyone's puuid
 
 BASE_URL = "https://americas.api.riotgames.com/"
 REGION_BASE_URL = "https://na1.api.riotgames.com/"
+
+
+def get_api_key():
+    return RIOT_KEY
 
 
 def get_puuid(id, tagline):

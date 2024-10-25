@@ -1,5 +1,5 @@
 from models.models import Profile, ChampionMasteries, RankedInfo
-from api.api_client import get_puuid
+from api.api_client import get_puuid, get_api_key
 from utils.helpers import create_patch_data_cache
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -48,6 +48,12 @@ async def user_info(
         "userMasteries": userMasteries,
         "userRankedInfo": userRankedInfo,
     }
+
+
+@app.get("/API-KEY-TEST")  # curl "http://0.0.0.0:8000/API-KEY-TEST"
+async def api_key_test():
+    apiKey = get_api_key()
+    return {"message": apiKey}
 
 
 if __name__ == "__main__":
