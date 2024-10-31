@@ -31,7 +31,19 @@ const UserSectionScreen = styled(Stack)(({ theme }) => ({
 const UserInfoContainer = styled(Stack)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  // backgroundColor: 'red',
+  backgroundColor: 'red',
+  alignItems: 'center',
+  // justifyContent: 'center',
+  padding: theme.spacing(2),
+  // [theme.breakpoints.up('sm')]: {
+  //   padding: theme.spacing(4),
+  // },
+}));
+
+const MatchHistoryContainer = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: 'blue',
   alignItems: 'center',
   // justifyContent: 'center',
   padding: theme.spacing(2),
@@ -44,7 +56,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   // alignSelf: 'flex-start',
-  width: '500px',
+  width: '400px',
   alignItems: 'center',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
@@ -133,14 +145,14 @@ export default function UserSection() {
         <UserSectionScreen>
           <UserInfoContainer>
             <Card>
-              <Typography variant="h4">Welcome, {currentUser}!</Typography>
+              <Typography variant="h4">{currentUser}</Typography>
               {userInfo.summonerInfo && (
                 <Typography variant="h6">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
               )}
               {userInfo.userRankedInfo && (
                 <UserSectionGroup>
                   <UserSectionItem>
-                    <Typography variant="body1" className='rankedInfoText'>Rank: {userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
                     <Typography variant="body1" className='rankedInfoText'>LP: {userInfo.userRankedInfo.rankedQueueInfo[0].lp}</Typography>
@@ -181,6 +193,20 @@ export default function UserSection() {
             ))}
             </Card>
           </UserInfoContainer>
+          <MatchHistoryContainer>
+            <Card>
+              <Typography variant="h4">Match History:</Typography>
+              {userInfo.userMatchHistory && (
+                userInfo.userMatchHistory.matchIds.map((matchId, index) => (
+                  <UserSectionGroup key={index}>
+                    <UserSectionItem>
+                      <Typography variant="h6">{matchId}</Typography>
+                    </UserSectionItem>
+                  </UserSectionGroup>
+                ))
+              )}
+            </Card>
+          </MatchHistoryContainer>
         </UserSectionScreen>
       </div>
     );

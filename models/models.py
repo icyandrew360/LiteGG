@@ -3,6 +3,8 @@ from api.api_client import (
     get_summoner_info,
     get_riot_id,
     get_ranked_info,
+    get_match_history,
+    get_match_details,
 )
 
 
@@ -69,3 +71,30 @@ class RankedInfo:
     @staticmethod
     def calculate_winrate(wins, losses):
         return round((wins / (wins + losses)) * 100, 2)
+
+
+class MatchHistory:
+    def __init__(self, matchIds):
+        self.matchIds = matchIds
+
+    @classmethod
+    async def create(cls, puuid):
+        matchIds = get_match_history(puuid)
+        return cls(matchIds)
+
+    @staticmethod
+    def get_simple_match_details(matchId, riotId):
+        allMatchDetails = get_match_details(matchId)
+
+        print(allMatchDetails)
+        # find if user is winner or loser
+        # return win/lose and champion played
+        # if puuid in allMatchDetails["winning_team"]["participants"][0]["puuid"]:
+        #     simpleMatchDetails = {
+        #         "win": True,
+        #         "champion": allMatchDetails["winning_team"]["participants"][0]["champion"],
+        #     }
+        # simpleMatchDetails = {
+
+        # }
+        return get_match_details(matchId)

@@ -1,4 +1,4 @@
-from models.models import Profile, ChampionMasteries, RankedInfo
+from models.models import Profile, ChampionMasteries, RankedInfo, MatchHistory
 from api.api_client import get_puuid, get_api_key
 from utils.helpers import create_patch_data_cache
 from fastapi import FastAPI, HTTPException, Query
@@ -42,11 +42,13 @@ async def user_info(
     summonerInfo = await Profile.create(puuid)
     userMasteries = await ChampionMasteries.create(puuid)
     userRankedInfo = await RankedInfo.create(summonerInfo.summonerId)
+    userMatchHistory = await MatchHistory.create(puuid)
     print(userMasteries)
     return {
         "summonerInfo": summonerInfo,
         "userMasteries": userMasteries,
         "userRankedInfo": userRankedInfo,
+        "userMatchHistory": userMatchHistory,  # right now only has self.matchIds
     }
 
 

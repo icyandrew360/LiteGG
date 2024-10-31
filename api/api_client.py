@@ -44,8 +44,8 @@ def get_match_details(
     url = f"{BASE_URL}lol/match/v5/matches/{match_id}"
     response = requests.get(url, headers=header)
     response = handle_response(response)
-    winner_participant_details = get_match_participant_details(response, winner=True)
-    loser_participant_details = get_match_participant_details(response, winner=False)
+    # winner_participant_details = get_match_participant_details(response, winner=True)
+    # loser_participant_details = get_match_participant_details(response, winner=False)
     simplified_details = {
         "game_metadata": {
             "gameMode": get_gamemode(response["info"]["gameMode"]),
@@ -55,8 +55,9 @@ def get_match_details(
             "gameCreation": convert_unix_to_date(response["info"]["gameCreation"]),
             "gameId": response["metadata"]["matchId"],
         },
-        "winning_team": winner_participant_details,
-        "losing_team": loser_participant_details,
+        "participants": get_match_participant_details(response),
+        # "winning_team": winner_participant_details,
+        # "losing_team": loser_participant_details,
     }
     return simplified_details
 
