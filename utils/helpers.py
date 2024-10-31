@@ -38,7 +38,8 @@ def get_match_participant_details(response):
             "kills": participant["kills"],
             "deaths": participant["deaths"],
             "assists": participant["assists"],
-            "cs_score": participant["totalMinionsKilled"],
+            "cs_score": participant["totalMinionsKilled"]
+            + participant["neutralMinionsKilled"],
         }
         for participant in response["info"]["participants"]
     ]
