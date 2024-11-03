@@ -29,9 +29,9 @@ def get_puuid(id, tagline):
 
 
 # use match_v5 stats to get match history, this only returns match ids! no details
-def get_match_history(puuid):
+def get_match_history(puuid, start=0, count=10):
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
-    url = f"{BASE_URL}lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=10"  # TODO: Add query parameters for start and count
+    url = f"{BASE_URL}lol/match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}"
     response = requests.get(url, headers=header)
     response = handle_response(response)
     return response
@@ -86,7 +86,6 @@ def get_champion_masteries(
         }
         for champion in response
         # converting champ ids to name https://developer.riotgames.com/docs/lol#data-dragon
-        # annoying.. need to download for every patch
     ]
     return simplified_mastery_list
 

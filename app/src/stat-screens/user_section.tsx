@@ -31,7 +31,7 @@ const UserSectionScreen = styled(Stack)(({ theme }) => ({
 const UserInfoContainer = styled(Stack)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: 'red',
+  // backgroundColor: 'red',
   alignItems: 'center',
   // justifyContent: 'center',
   padding: theme.spacing(2),
@@ -43,8 +43,9 @@ const UserInfoContainer = styled(Stack)(({ theme }) => ({
 const MatchHistoryContainer = styled(Stack)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: 'blue',
+  // backgroundColor: 'blue',
   alignItems: 'center',
+  width: '60vw',
   // justifyContent: 'center',
   padding: theme.spacing(2),
   // [theme.breakpoints.up('sm')]: {
@@ -56,7 +57,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   // alignSelf: 'flex-start',
-  width: '400px',
+  width: '100%',
   alignItems: 'center',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
@@ -149,7 +150,7 @@ export default function UserSection() {
               {userInfo.summonerInfo && (
                 <Typography variant="h6">Level: {userInfo.summonerInfo.summonerLevel}</Typography>
               )}
-              {userInfo.userRankedInfo && (
+              {userInfo.userRankedInfo ? (
                 <UserSectionGroup>
                   <UserSectionItem>
                     <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
@@ -172,10 +173,12 @@ export default function UserSection() {
                     </Typography>
                   </UserSectionItem>
                 </UserSectionGroup>
+              ) : (
+                <Typography variant="h6">Unranked</Typography>
               )}
             </Card>
             <Card>
-            <Typography variant="h4">Top 10 Masteries:</Typography>
+            <Typography variant="h4">Top 10 Masteries</Typography>
             {userInfo.userMasteries.championMasteryList.slice(0, 10).map((mastery, index) => (
               <UserSectionGroup key={index}>
                 <UserSectionItem>
@@ -194,17 +197,24 @@ export default function UserSection() {
             </Card>
           </UserInfoContainer>
           <MatchHistoryContainer>
-            <Card>
-              <Typography variant="h4">Match History:</Typography>
-              {userInfo.userMatchHistory && (
-                userInfo.userMatchHistory.matchIds.map((matchId, index) => (
-                  <UserSectionGroup key={index}>
-                    <UserSectionItem>
-                      <Typography variant="h6">{matchId}</Typography>
-                    </UserSectionItem>
-                  </UserSectionGroup>
-                ))
-              )}
+            <Card className="matchHistoryCard">
+            <Typography variant="h4">Match History</Typography>
+            {userInfo.userMatchHistory && userInfo.userMatchHistory.map((match, index) => (
+              <UserSectionGroup key={index}>
+                <UserSectionItem>
+                  <Typography variant="body1">{match.game_metadata.gameMode}</Typography>
+                </UserSectionItem>
+                <UserSectionItem>
+                  <Typography variant="body1">{match.game_metadata.queueType}</Typography>
+                </UserSectionItem>
+                <UserSectionItem>
+                  <Typography variant="body1">Duration: {match.game_metadata.gameDuration}</Typography>
+                </UserSectionItem>
+                <UserSectionItem>
+                  <Typography variant="body1">Creation Time: {match.game_metadata.gameCreation}</Typography>
+                </UserSectionItem>
+              </UserSectionGroup>
+            ))}
             </Card>
           </MatchHistoryContainer>
         </UserSectionScreen>

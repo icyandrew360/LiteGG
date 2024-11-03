@@ -1,5 +1,5 @@
 from models.models import Profile, ChampionMasteries, RankedInfo, MatchHistory
-from api.api_client import get_puuid, get_api_key
+from api.api_client import get_puuid, get_api_key, get_match_details
 from utils.helpers import create_patch_data_cache
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -43,12 +43,16 @@ async def user_info(
     userMasteries = await ChampionMasteries.create(puuid)
     userRankedInfo = await RankedInfo.create(summonerInfo.summonerId)
     userMatchHistory = await MatchHistory.create(puuid)
-    print(userMasteries)
+
+    match_details = [
+        get_match_details(matchId) for matchId in userMatchHistory.matchIds
+    ]
+
     return {
         "summonerInfo": summonerInfo,
         "userMasteries": userMasteries,
         "userRankedInfo": userRankedInfo,
-        "userMatchHistory": userMatchHistory,  # right now only has self.matchIds
+        "userMatchHistory": match_details,  # right now only has self.matchIds
     }
 
 
