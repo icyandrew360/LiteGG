@@ -45,7 +45,7 @@ async def user_info(
     userMatchHistory = await MatchHistory.create(puuid)
 
     match_details = [
-        get_match_details(matchId) for matchId in userMatchHistory.matchIds
+        get_match_details(matchId, riotID) for matchId in userMatchHistory.matchIds
     ]
 
     return {
