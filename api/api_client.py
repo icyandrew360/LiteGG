@@ -38,14 +38,22 @@ def get_match_history(puuid, start=0, count=10):
 
 
 def get_match_details(
-    match_id,
+    match_id, currentRiotID
 ):  # use this for listing 1 match's details after clicking the match
     header = {"X-Riot-Token": f"{RIOT_KEY}"}
     url = f"{BASE_URL}lol/match/v5/matches/{match_id}"
     response = requests.get(url, headers=header)
     response = handle_response(response)
-    # winner_participant_details = get_match_participant_details(response, winner=True)
-    # loser_participant_details = get_match_participant_details(response, winner=False)
+
+    participants = get_match_participant_details(response)
+    user_win = None
+    for participant in participants:
+        if (
+            participant["riotIdName"] + "#" + participant["riotIdTagline"]
+            == currentRiotID
+        ):
+            user_win = participant["win"]
+            break
     simplified_details = {
         "game_metadata": {
             "gameMode": get_gamemode(response["info"]["gameMode"]),
@@ -55,9 +63,8 @@ def get_match_details(
             "gameCreation": convert_unix_to_date(response["info"]["gameCreation"]),
             "gameId": response["metadata"]["matchId"],
         },
-        "participants": get_match_participant_details(response),
-        # "winning_team": winner_participant_details,
-        # "losing_team": loser_participant_details,
+        "participants": participants,
+        "user_win": user_win,
     }
     return simplified_details
 

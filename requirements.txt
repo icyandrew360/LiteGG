@@ -5,3 +5,4 @@ ruff
 fastapi
 uvicorn
 pytz
+pytest

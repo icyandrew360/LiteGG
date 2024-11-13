@@ -198,7 +198,6 @@ export default function UserSection() {
             </Card>
           </UserInfoContainer>
           <MatchHistory/>
-
         </UserSectionScreen>
       </div>
     );
