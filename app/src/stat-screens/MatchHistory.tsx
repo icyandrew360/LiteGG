@@ -108,6 +108,9 @@ export default function MatchHistory() {
             <UserSectionItem>
               <Typography variant="body1">Creation Time: {match.game_metadata.gameCreation}</Typography>
             </UserSectionItem>
+            <UserSectionItem>
+                <Typography variant="body1">{match.user_win ? "Win" : "Loss"}</Typography>
+            </UserSectionItem>
           </UserSectionGroup>
         ))}
         {/* <MatchHistoryContainer>
