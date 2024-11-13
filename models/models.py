@@ -78,8 +78,8 @@ class MatchHistory:
         self.matchIds = matchIds
 
     @classmethod
-    async def create(cls, puuid):
-        matchIds = get_match_history(puuid)
+    async def create(cls, puuid, start, count):
+        matchIds = get_match_history(puuid, start, count)
         return cls(matchIds)
 
     @staticmethod

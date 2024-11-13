@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 // import { LiteGGIcon } from './CustomIcons';
 import './user_section.css';
 import { useUser } from '../UserContext.tsx';
+import MatchHistory from './MatchHistory.tsx';
 
 const UserSectionScreen = styled(Stack)(({ theme }) => ({
   minHeight:"100vh",
@@ -196,27 +197,8 @@ export default function UserSection() {
             ))}
             </Card>
           </UserInfoContainer>
-          <MatchHistoryContainer>
-            <Card className="matchHistoryCard">
-            <Typography variant="h4">Match History</Typography>
-            {userInfo.userMatchHistory && userInfo.userMatchHistory.map((match, index) => (
-              <UserSectionGroup key={index}>
-                <UserSectionItem>
-                  <Typography variant="body1">{match.game_metadata.gameMode}</Typography>
-                </UserSectionItem>
-                <UserSectionItem>
-                  <Typography variant="body1">{match.game_metadata.queueType}</Typography>
-                </UserSectionItem>
-                <UserSectionItem>
-                  <Typography variant="body1">Duration: {match.game_metadata.gameDuration}</Typography>
-                </UserSectionItem>
-                <UserSectionItem>
-                  <Typography variant="body1">Creation Time: {match.game_metadata.gameCreation}</Typography>
-                </UserSectionItem>
-              </UserSectionGroup>
-            ))}
-            </Card>
-          </MatchHistoryContainer>
+          <MatchHistory/>
+
         </UserSectionScreen>
       </div>
     );

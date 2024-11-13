@@ -42,17 +42,32 @@ async def user_info(
     summonerInfo = await Profile.create(puuid)
     userMasteries = await ChampionMasteries.create(puuid)
     userRankedInfo = await RankedInfo.create(summonerInfo.summonerId)
-    userMatchHistory = await MatchHistory.create(puuid)
-
-    match_details = [
-        get_match_details(matchId) for matchId in userMatchHistory.matchIds
-    ]
 
     return {
         "summonerInfo": summonerInfo,
         "userMasteries": userMasteries,
         "userRankedInfo": userRankedInfo,
-        "userMatchHistory": match_details,  # right now only has self.matchIds
+    }
+
+
+@app.get("/match-history")
+async def match_history(
+    riotID: str = Query(..., description="Riot ID in the format of username#tagline"),
+    count: int = 10,
+    start: int = 0,
+):
+    if not riotID:
+        raise HTTPException(status_code=400, detail="Please provide a valid Riot ID")
+    id, tagline = riotID.split("#")
+    puuid = get_puuid(id, tagline)
+
+    userMatchHistory = await MatchHistory.create(puuid, start=start, count=count)
+    match_details = [
+        get_match_details(matchId) for matchId in userMatchHistory.matchIds
+    ]
+
+    return {
+        "userMatchHistory": match_details,
     }
 
 
