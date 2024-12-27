@@ -45,20 +45,14 @@ const UserInfoContainer = styled(Stack)(({ theme }) => ({
 const MatchHistoryContainer = styled(Stack)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  // backgroundColor: 'blue',
   alignItems: 'center',
   width: '60vw',
-  // justifyContent: 'center',
   padding: theme.spacing(2),
-  // [theme.breakpoints.up('sm')]: {
-  //   padding: theme.spacing(4),
-  // },
 }));
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  // alignSelf: 'flex-start',
   width: '100%',
   alignItems: 'center',
   padding: theme.spacing(4),
@@ -76,18 +70,14 @@ const UserSectionGroup = styled(MuiCard)(({ theme }) => ({
   height:"60px",
   width:"100%",
   display: 'flex',
-  // backgroundColor: 'green',
   backgroundColor: '#141414',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  // paddingTop: theme.spacing(2),
-  // paddingBottom
 
 }));
 const UserSectionItem = styled(Stack)(({ theme }) => ({
   height:"100%",
   display: 'flex',
-  // backgroundColor: 'blue',
   flexDirection: 'column',
   justifyContent: 'center',
   padding: theme.spacing(2),
@@ -198,8 +188,8 @@ export default function UserSection() {
                     <Typography variant="body1" className='rankedInfoText'>LP: {selectedRankedInfo.lp}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
-                    <Typography variant="body1" className='rankedInfoText'>Win/Loss</Typography>
-                    <Typography variant="body1" className='rankedInfoText'>{selectedRankedInfo.wins} - {selectedRankedInfo.losses}</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>W/L</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>{selectedRankedInfo.wins}/{selectedRankedInfo.losses}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
                     <Typography variant="body1" className='rankedInfoText'>Winrate</Typography>
