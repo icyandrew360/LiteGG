@@ -29,6 +29,18 @@ const theme = createTheme({
       color: "#e3f2fd"
     }
   },
+  components: {
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          color: "#e3f2fd",
+        },
+        icon: {
+          color: "#e3f2fd",
+        },
+      },
+    },
+  },
   shape: {
     borderRadius: 6
   }

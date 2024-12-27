@@ -5,11 +5,12 @@
 // import FormLabel from '@mui/material/FormLabel';
 // import FormControl from '@mui/material/FormControl';
 // import TextField from '@mui/material/TextField';
-import { useEffect, useState } from 'react';
-import { CircularProgress, useScrollTrigger } from '@mui/material';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { CircularProgress, MenuItem, useScrollTrigger } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 // import { LiteGGIcon } from './CustomIcons';
@@ -91,16 +92,31 @@ const UserSectionItem = styled(Stack)(({ theme }) => ({
   justifyContent: 'center',
   padding: theme.spacing(2),
 
-  // paddingLeft: theme.spacing(2),
-  // paddingRight: theme.spacing(2),
 }));
 
+type RankedQueueInfo = {
+  queueType: string;
+  tier: string;
+  rank: string;
+  lp: number;
+  wins: number;
+  losses: number;
+  winrate: number;
+}
+
+type MasteryInfo = {
+  champion: string;
+  championPoints: number;
+  championLevel: number;
+  lastPlayTime: number;
+}
 
 export default function UserSection() {
   const { currentUser, userInfo, setUserInfo} = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [selectedQueueType, setSelectedQueueType] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,7 +130,11 @@ export default function UserSection() {
         setSuccess(true);
         setError(false)
         setLoading(false);
+        if (response.data.userRankedInfo){
+          setSelectedQueueType(response.data.userRankedInfo.rankedQueueInfo[0].queueType);
+        }
       } catch (error) {
+        console.error('Error fetching user info:', error);
         setError(true);
         setLoading(false);
       }
@@ -124,6 +144,14 @@ export default function UserSection() {
       fetchData();
     }
   }, [currentUser]);
+
+  const handleQueueTypeChange = (event: SelectChangeEvent<string>) => {
+    setSelectedQueueType(event.target.value as string);
+  };
+
+  const selectedRankedInfo = userInfo?.userRankedInfo?.rankedQueueInfo?.find(
+    (queueInfo: RankedQueueInfo) => queueInfo.queueType === selectedQueueType
+  );
 
   if (loading) {
     return (
@@ -153,24 +181,34 @@ export default function UserSection() {
               )}
               {userInfo.userRankedInfo ? (
                 <UserSectionGroup>
+                  <Select
+                    value={selectedQueueType}
+                    onChange={handleQueueTypeChange}
+                  >
+                    {userInfo.userRankedInfo.rankedQueueInfo.map((queueInfo: RankedQueueInfo, index: number) => (
+                      <MenuItem key={index} value={queueInfo.queueType}>
+                      {queueInfo.queueType}
+                      </MenuItem>
+                    ))}
+                  </Select>
                   <UserSectionItem>
-                    <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].tier} {userInfo.userRankedInfo.rankedQueueInfo[0].rank}</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>{selectedRankedInfo.tier} {selectedRankedInfo.rank}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
-                    <Typography variant="body1" className='rankedInfoText'>LP: {userInfo.userRankedInfo.rankedQueueInfo[0].lp}</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>LP: {selectedRankedInfo.lp}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
                     <Typography variant="body1" className='rankedInfoText'>Win/Loss</Typography>
-                    <Typography variant="body1" className='rankedInfoText'>{userInfo.userRankedInfo.rankedQueueInfo[0].wins} - {userInfo.userRankedInfo.rankedQueueInfo[0].losses}</Typography>
+                    <Typography variant="body1" className='rankedInfoText'>{selectedRankedInfo.wins} - {selectedRankedInfo.losses}</Typography>
                   </UserSectionItem>
                   <UserSectionItem>
                     <Typography variant="body1" className='rankedInfoText'>Winrate</Typography>
                     <Typography
                       variant="body1"
                       className='rankedInfoText'
-                      style={{color: userInfo.userRankedInfo.rankedQueueInfo[0].winrate >= 50 ? '#00b327' : '#c91844'}}
+                      style={{color: selectedRankedInfo.winrate >= 50 ? '#00b327' : '#c91844'}}
                     >
-                        {userInfo.userRankedInfo.rankedQueueInfo[0].winrate}%
+                        {selectedRankedInfo.winrate}%
                     </Typography>
                   </UserSectionItem>
                 </UserSectionGroup>
@@ -180,19 +218,15 @@ export default function UserSection() {
             </Card>
             <Card>
             <Typography variant="h4">Top 10 Masteries</Typography>
-            {userInfo.userMasteries.championMasteryList.slice(0, 10).map((mastery, index) => (
+            {userInfo.userMasteries.championMasteryList.slice(0, 10).map((masteryInfo: MasteryInfo, index: number) => (
               <UserSectionGroup key={index}>
                 <UserSectionItem>
-                  <Typography variant="h6">{mastery.champion}:</Typography>
+                  <Typography variant="h6">{masteryInfo.champion}:</Typography>
                 </UserSectionItem>
                 <UserSectionItem>
                   <Typography variant="body1">Mastery points</Typography>
-                  <Typography variant="body1">{mastery.championPoints}</Typography>
+                  <Typography variant="body1">{masteryInfo.championPoints}</Typography>
                 </UserSectionItem>
-                {/* <UserSectionItem>
-                  <Typography variant="body1">Last played</Typography>
-                  <Typography variant="body1">{mastery.lastPlayTime}</Typography>
-                </UserSectionItem> */}
               </UserSectionGroup>
             ))}
             </Card>
