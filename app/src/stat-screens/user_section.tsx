@@ -17,6 +17,7 @@ import { styled } from '@mui/material/styles';
 import './user_section.css';
 import { useUser } from '../UserContext.tsx';
 import MatchHistory from './MatchHistory.tsx';
+import { CURRENT_BASE_URL } from './UrlConsts';
 
 const UserSectionScreen = styled(Stack)(({ theme }) => ({
   minHeight:"100vh",
@@ -114,7 +115,8 @@ export default function UserSection() {
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 50));
         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' }); // Scroll down 100vh
-        const response = await axios.get(`http://localhost:8000/user-info?riotID=${encodeURIComponent(currentUser)}`);
+        console.log(`${CURRENT_BASE_URL}/user-info?riotID=${encodeURIComponent(currentUser)}`)
+        const response = await axios.get(`${CURRENT_BASE_URL}/user-info?riotID=${encodeURIComponent(currentUser)}`);
         setUserInfo(response.data);
         console.log('User info:', response.data);
         setSuccess(true);

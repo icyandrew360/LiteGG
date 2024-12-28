@@ -6,6 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useUser } from '../UserContext.tsx';
+import { CURRENT_BASE_URL } from './UrlConsts';
 
 const MatchHistoryContainer = styled(Stack)(({ theme }) => ({
   display: 'flex',
@@ -83,7 +84,7 @@ export default function MatchHistory() {
     const fetchMatchHistory = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8000/match-history?riotID=${encodeURIComponent(currentUser)}`);
+        const response = await axios.get(`${CURRENT_BASE_URL}/match-history?riotID=${encodeURIComponent(currentUser)}`);
         setMatchHistory(response.data.userMatchHistory);
         setLoading(false);
       } catch (error) {
