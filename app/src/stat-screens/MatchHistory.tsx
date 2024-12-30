@@ -6,6 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useUser } from '../UserContext.tsx';
+import './MatchHistory.css';
 import { CURRENT_BASE_URL } from './UrlConsts';
 
 const MatchHistoryContainer = styled(Stack)(({ theme }) => ({
